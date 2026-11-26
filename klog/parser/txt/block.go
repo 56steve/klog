@@ -52,7 +52,10 @@ parsingLoop:
 		}
 
 		// Process line.
-		nextChar := i + len(string(char))
+		// Note: For invalid UTF-8, `char` is `utf8.RuneError`, which is wider
+		// (3 bytes) than the single byte that was actually consumed.
+		_, charSize := utf8.DecodeRuneInString(text[i:])
+		nextChar := i + charSize
 		currentLine := text[currentLineStart:nextChar]
 		line := NewLineFromString(currentLine)
 

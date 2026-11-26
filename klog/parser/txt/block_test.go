@@ -35,6 +35,11 @@ func TestParseBlock(t *testing.T) {
 		{"喜左衛門\n", []string{"喜左衛門"}, 0, 0},
 		{"\n😀·½\n ", []string{"😀·½"}, 1, 1},
 
+		// Invalid UTF-8 (e.g. a Latin-1 encoded file) at the very end
+		{"caf\xe9", []string{"caf\xe9"}, 0, 0},
+		{"\xe9", []string{"\xe9"}, 0, 0},
+		{"a\nb\xe2\x82", []string{"a", "b\xe2\x82"}, 0, 0},
+
 		// Multiple lines
 		{"a1\na2", []string{"a1", "a2"}, 0, 0},
 		{"\nasdf\nasdf", []string{"asdf", "asdf"}, 1, 0},
